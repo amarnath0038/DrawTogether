@@ -102,9 +102,10 @@ async function getRoomChats(req: Request<{ roomId: string }>, res: Response) {
     const messages = await prismaClient.chat.findMany({
       where: { roomId },
       orderBy: { id: "desc" },
-      take: 1000,
+      take: 50,
     });
-    res.json({ messages });
+    const chat = messages.map(m => m.message);
+    res.json({ chat });
   } catch (err) {
     console.error("Error fetching chats:", err);
     res.status(500).json({ message: "Internal server error", messages: [] });
@@ -120,8 +121,20 @@ async function getRoomBySlug(req: Request<{ slug: string }>, res: Response) {
       res.status(400).json({ message: "Invalid slug" });
     }
 
-    const room = await prismaClient.room.findFirst({where: { slug }});
-    res.json({ room });
+    const room = await prismaClient.room.findFirst({
+      where: { slug },
+      include: {admin: true}
+    });
+
+    if (!room) {
+      res.status(404).json({message: "Room not found"});
+    }
+    const {admin, ...rest} = room as Exclude<typeof room, null>;
+;
+    res.json({ room: {
+      ...rest,
+      adminName: admin?.name || "Unknown"
+    } });
   } catch (err) {
     console.error("Error fetching room:", err);
     res.status(500).json({ message: "Server error", room: null });
