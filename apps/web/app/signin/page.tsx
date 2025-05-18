@@ -5,25 +5,24 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 
-export default function Signup() {
+export default function Signin() {
   const router = useRouter();
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  async function signupHandler(e: React.FormEvent) {
+  
+  async function signinHandler(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/signup", {
-        name,
+      const res = await axios.post("http://localhost:3001/signin", {
         email,
         password
       });
-      router.push("/signin");
+      localStorage.setItem("token", res.data.token);
+      router.push("/dashboard");
     } catch (err: any) {
-      console.error("Signup error", err);
-      alert("Signup failed");
+      console.error("Signin error", err);
+      alert("Signin failed");
     }
   }
 
@@ -36,9 +35,8 @@ export default function Signup() {
         backgroundRepeat: 'no-repeat',
       }}>
       <div className="w-full max-w-md bg-black/60 backdrop-blur-md p-8 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold text-white mb-6 text-center">Create your account</h2>
-        <form className="space-y-4" onSubmit={signupHandler}>
-          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600" />
+        <h2 className="text-3xl font-bold text-white mb-6 text-center">Welcome back</h2>
+        <form className="space-y-4" onSubmit={signinHandler}>
           <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600" />
           <div className="relative">
             <input 
@@ -57,12 +55,12 @@ export default function Signup() {
             </button>
           </div>
           <button type="submit" className="w-full bg-indigo-800 text-white py-3 rounded-md hover:bg-gray-200 hover:text-black hover:font-semibold">
-            Sign Up
+            Sign In
           </button>
         </form>
         <p className="text-white text-center mt-4">
-          Already have an account?{" "}
-          <span onClick={() => router.push("/signin")} className="text-indigo-400 underline cursor-pointer">Sign in</span>
+          Don't have an account?{" "}
+          <span onClick={() => router.push("/signup")} className="text-indigo-400 underline cursor-pointer">Sign up</span>
         </p>
       </div>
     </div>
