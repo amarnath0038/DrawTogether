@@ -9,13 +9,15 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  photo    String?
-  name     String
-  email    String  @unique
-  password String
-  rooms    Room[]
-  chats    Chat[]
+  id            String  @id @default(uuid())
+  photo         String?
+  name          String
+  email         String  @unique
+  oauthProvider String? @db.VarChar
+  oauthId       String?
+  password      String
+  rooms         Room[]
+  chats         Chat[]
 }
 
 model Room {

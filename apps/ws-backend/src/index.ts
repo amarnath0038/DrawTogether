@@ -84,7 +84,7 @@ wss.on("connection", (ws: WebSocket, request) => {
           ws.send(JSON.stringify({ type: "error", message: "Invalid room ID" }));
           return;
         }
-        user.rooms = user.rooms.filter(room => room !== parsedData.room);
+        user.rooms = user.rooms.filter(room => room !== parsedData.roomId);
         break;
 
       case "chat":

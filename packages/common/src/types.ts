@@ -7,12 +7,6 @@ const passwordRule =  z.string()
 
 
 export const signupSchema = z.object({
-  // username: z.string()
-  //   .min(2, {message: "Username must be atleast 2 characters"})
-  //   .max(20, {message: "Username cannot exceed 20 characters"})
-  //   .trim()
-  //   .toLowerCase(),
-
   email: z.string()
     .email({message: "Invalid email address"})
     .trim()
@@ -29,12 +23,6 @@ export const signupSchema = z.object({
 
 export const signinSchema = z
   .object({
-      // username: z.string()
-      //   .min(2, {message: "Username must be atleast 2 characters"})
-      //   .max(20, {message: "Username cannot exceed 20 characters"})
-      //   .trim()
-      //   .toLowerCase(),
-
       email: z.string()
         .email({message: "Invalid email address"})
         .trim()
