@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, Palette, Moon, Sun } from "lucide-react";

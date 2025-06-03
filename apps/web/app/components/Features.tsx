@@ -1,6 +1,3 @@
-
-
-
 import { Users, Zap, Cloud, Lock, Smartphone, Download } from "lucide-react";
 
 const features = [

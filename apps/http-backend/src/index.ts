@@ -238,7 +238,7 @@ async function userCreateRoom(req: Request, res: Response) {
     const room = await prismaClient.room.create({
       data: {
         adminId: userId.toString(),
-        slug: req.body.slug,
+        slug: req.body.name,
       },
     });
     res.json({ message: "You successfully created a room", room });
@@ -276,6 +276,7 @@ async function getRoomBySlug(req: Request<{ slug: string }>, res: Response) {
 
     if (!slug || typeof slug !== "string") {
       res.status(400).json({ message: "Invalid slug" });
+      return;
     }
 
     const room = await prismaClient.room.findFirst({
@@ -285,6 +286,7 @@ async function getRoomBySlug(req: Request<{ slug: string }>, res: Response) {
 
     if (!room) {
       res.status(404).json({message: "Room not found"});
+      return;
     }
     const {admin, ...rest} = room as Exclude<typeof room, null>;
 ;
@@ -302,8 +304,8 @@ async function getRoomBySlug(req: Request<{ slug: string }>, res: Response) {
 app.post("/signup", userSignup);
 app.post("/signin", userSignin);
 app.post("/create-room", userMiddleware, userCreateRoom);
-app.get("/chats/:roomId", userMiddleware, getRoomChats);
-app.get("/room/:slug", userMiddleware, getRoomBySlug);
+app.get("/chats/:roomId", getRoomChats);
+app.get("/room/:slug", getRoomBySlug);
 
 const PORT = 3001;
 

@@ -18,8 +18,9 @@ export function userMiddleware(req: Request, res: Response, next: NextFunction) 
   }
 
   try {
-    const decodedInfo = jwt.verify(token, JWT_SECRET) as { id: number };
-    req.user = { id: decodedInfo.id.toString() };
+    const decodedInfo = jwt.verify(token, JWT_SECRET) as { id: string };
+    console.log("Decoded JWT:", decodedInfo);
+    req.user = { id: decodedInfo.id };
     next();
   } catch (err) {
     res.status(401).json({ message: "You are not signed in" });

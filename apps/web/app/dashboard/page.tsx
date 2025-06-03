@@ -35,7 +35,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
       setCreating(true);
       const res = await axios.post("http://localhost:3001/create-room",
-        {slug},
+        {name: roomName},
         {headers: {Authorization: `Bearer ${token}`}}
       );
       setRoomName("");
@@ -49,7 +49,8 @@ export default function Dashboard() {
     }
   }
 
-  function handleJoinRoom() {
+  function handleJoinRoom(e: React.FormEvent) {
+    e.preventDefault();
     if (!joinRoomCode.trim()) {
       alert("Please enter room code");
       return;
@@ -166,14 +167,9 @@ export default function Dashboard() {
               {modalType === "create" ? "Create a Room" : "Join a Room"}
             </h2>
             <form
-              onSubmit={
-                modalType === "create" ? handleCreateRoom : (e) => {
-                  e.preventDefault();
-                  handleJoinRoom();
-                }
-              }
+              onSubmit={modalType === "create" ? handleCreateRoom : handleJoinRoom}
               className="space-y-6"
-            >
+              >
               <div>
                 <input
                   type="text"
@@ -193,7 +189,7 @@ export default function Dashboard() {
                   Cancel
                 </button>
                 <button 
-                  type="submit" 
+                  type="submit"
                   disabled={creating && modalType === "create"} 
                   className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                   {modalType === "create" ? creating ? "Creating..." : "Create" : "Join"}
@@ -206,3 +202,6 @@ export default function Dashboard() {
     </div>
   );
 }
+
+
+

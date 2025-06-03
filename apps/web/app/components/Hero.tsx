@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { ArrowRight, Users, Zap, Palette } from "lucide-react";
+import { Users, Zap, Palette } from "lucide-react";
 
 export const Hero = () => {
   return (
