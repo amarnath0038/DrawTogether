@@ -48,8 +48,7 @@ passport.deserializeUser(async (id: string, done) => {
     done(err);
   }
 });
-console.log("jwt: ", process.env.JWT_SECRET)
-console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+
 // OAuth strategy(Google)
 passport.use(
   new GoogleStrategy(
