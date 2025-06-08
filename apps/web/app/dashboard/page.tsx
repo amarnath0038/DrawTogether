@@ -6,15 +6,6 @@ import { useState } from "react";
 import { useTheme } from ".././hooks/useTheme";
 import { Plus, Key, Clock, Palette, Moon, Sun, LogOut } from "lucide-react";
 
-function slugify(text: string) {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-");
-}
 
 export default function Dashboard() {
   const router = useRouter();
@@ -30,7 +21,7 @@ export default function Dashboard() {
       alert("Please enter a room name");
       return;
     }
-    const slug = slugify(roomName);
+
     try {
       const token = localStorage.getItem("token");
       setCreating(true);
@@ -38,9 +29,14 @@ export default function Dashboard() {
         {name: roomName},
         {headers: {Authorization: `Bearer ${token}`}}
       );
+      const actualRoomId = res.data.room.id;
+      if (!actualRoomId) {
+        alert("Failed to get roomId");
+        return;
+      }
       setRoomName("");
       setModalType(null);
-      router.push(`/room/${slug}`);
+      router.push(`/room/${actualRoomId}`);
     } catch (err) {
       console.log("Create room error: ", err);
       alert("Error while creating room");

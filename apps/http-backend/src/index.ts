@@ -249,11 +249,11 @@ async function userCreateRoom(req: Request, res: Response) {
 
 async function getRoomChats(req: Request<{ roomId: string }>, res: Response) {
   try {
-    const roomId = parseInt(req.params.roomId);
+    const roomId = req.params.roomId;
 
-    if (isNaN(roomId)) {
-      res.status(400).json({ message: "Invalid roomId" });
-    }
+    // if (isNaN(roomId)) {
+    //   res.status(400).json({ message: "Invalid roomId" });
+    // }
 
     const messages = await prismaClient.chat.findMany({
       where: { roomId },

@@ -33,7 +33,7 @@ function checkUser(token: string): string | null {
 
 wss.on("connection", (ws: WebSocket, request) => {
   const url = request.url;
-  console.log("Incoming connection URL:", url);
+  //console.log("Incoming connection URL:", url);
 
   if (!url) {
     ws.close();
@@ -42,10 +42,10 @@ wss.on("connection", (ws: WebSocket, request) => {
 
   const queryParams = new URLSearchParams(url.split("?")[1]);
   const token = queryParams.get("token") || "";
-  console.log("Token from URL:", token);
+  //console.log("Token from URL:", token);
 
   const userId = checkUser(token);
-  console.log("Decoded user:", userId);
+  //console.log("Decoded user:", userId);
 
   if (!userId) {
     ws.close();
@@ -87,38 +87,71 @@ wss.on("connection", (ws: WebSocket, request) => {
         user.rooms = user.rooms.filter(room => room !== parsedData.roomId);
         break;
 
+      // case "chat":
+      //   {
+      //     const { roomId, message } = parsedData;
+      //     if (typeof roomId !== "string" || typeof message !== "string") {
+      //       ws.send(JSON.stringify({ type: "error", message: "Invalid message format" }));
+      //       return;
+      //     }
+
+      //     try {
+      //       await prismaClient.chat.create({
+      //         data: {
+      //           roomId: Number(roomId),
+      //           message,
+      //           userId: user.userId
+      //         }
+      //       });
+
+      //       users.forEach(u => {
+      //         if (u.rooms.includes(roomId)) {
+      //           u.ws.send(JSON.stringify({
+      //             type: "chat",
+      //             roomId,
+      //             message
+      //           }));
+      //         }
+      //       });
+      //     } catch (err) {
+      //       console.error("Database error:", err);
+      //       ws.send(JSON.stringify({ type: "error", message: "Failed to save message" }));
+      //     }
+      //   }
+      //   break;
       case "chat":
-        {
-          const { roomId, message } = parsedData;
-          if (typeof roomId !== "string" || typeof message !== "string") {
-            ws.send(JSON.stringify({ type: "error", message: "Invalid message format" }));
-            return;
+        const { roomId, message } = parsedData;
+
+        try {
+          const parsed = JSON.parse(message); // message = '{"shape": {...}}'
+          if (!parsed?.shape) {
+            throw new Error("Invalid shape format");
           }
 
-          try {
-            await prismaClient.chat.create({
-              data: {
-                roomId: Number(roomId),
-                message,
-                userId: user.userId
-              }
-            });
+          await prismaClient.chat.create({
+            data: {
+              roomId,
+              message, // store stringified shape
+              userId: user.userId
+            }
+          });
 
-            users.forEach(u => {
-              if (u.rooms.includes(roomId)) {
-                u.ws.send(JSON.stringify({
-                  type: "chat",
-                  roomId,
-                  message
-                }));
-              }
-            });
-          } catch (err) {
-            console.error("Database error:", err);
-            ws.send(JSON.stringify({ type: "error", message: "Failed to save message" }));
-          }
+          // Broadcast to everyone in the room
+          users.forEach(u => {
+            if (u.rooms.includes(String(roomId))) {
+              u.ws.send(JSON.stringify({
+                type: "chat",
+                roomId,
+                message
+              }));
+            }
+          });
+        } catch (err) {
+          console.error("Invalid shape format or DB error:", err);
+          ws.send(JSON.stringify({ type: "error", message: "Invalid shape format" }));
         }
         break;
+
 
       default:
         ws.send(JSON.stringify({ type: "error", message: "Message type is unknown" }));

@@ -3,22 +3,30 @@ import { IconButton } from "./IconButton";
 import {
   Circle,
   Pencil,
+  ArrowRight,
   Square,
+  Triangle,
+  Diamond,
   Plus,
   Minus,
   Undo,
   Redo,
+  Users,
+  Trash2,
+  Eraser
 } from "lucide-react";
 import { Game } from "../sketch/Game";
 
-export type Tool = "circle" | "rect" | "pencil";
+export type Tool = "pencil" | "line" | "arrow" | "rect" | "circle" | "triangle" | "rhombus" | "eraser";
 
 export function Canvas({
   roomId,
   socket,
+  onCollaborate
 }: {
   socket: WebSocket;
   roomId: string;
+  onCollaborate: () => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [game, setGame] = useState<Game>();
@@ -69,6 +77,8 @@ export function Canvas({
         scale={scale}
         onUndo={() => game?.undo()}
         onRedo={() => game?.redo()}
+        onClear={() => game?.clearAllShapes()}
+        onCollaborate={onCollaborate}
       />
     </div>
   );
@@ -83,6 +93,8 @@ function Topbar({
   scale,
   onUndo,
   onRedo,
+  onClear,
+  onCollaborate
 }: {
   selectedTool: Tool;
   setSelectedTool: (s: Tool) => void;
@@ -92,34 +104,68 @@ function Topbar({
   scale: number;
   onUndo: () => void;
   onRedo: () => void;
+  onClear: () => void;
+  onCollaborate: () => void;
 }) {
   return (
     <>
-      {/* Tool selection top center */}
-      <div
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-3 px-4 py-1 bg-zinc-800 shadow-lg rounded-lg z-50"
-      >
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-[1px] px-3 py-0.2 bg-zinc-800 shadow-lg rounded-lg z-50">
         <IconButton
           onClick={() => setSelectedTool("pencil")}
           activated={selectedTool === "pencil"}
+          title={"Pencil"}
           icon={<Pencil size={20} />}
         />
         <IconButton
           onClick={() => setSelectedTool("rect")}
           activated={selectedTool === "rect"}
+          title={"Rectangle"}
           icon={<Square size={20} />}
         />
         <IconButton
           onClick={() => setSelectedTool("circle")}
           activated={selectedTool === "circle"}
+          title={"Circle"}
           icon={<Circle size={20} />}
         />
+        <IconButton
+          onClick={() => setSelectedTool("triangle")}
+          activated={selectedTool === "triangle"}
+          title={"Triangle"}
+          icon={<Triangle size={20} />}
+        />
+        <IconButton
+          onClick={() => setSelectedTool("rhombus")}
+          activated={selectedTool === "rhombus"}
+          title={"Rhombus"}
+          icon={<Diamond size={20} />}
+        />
+        <IconButton
+          onClick={() => setSelectedTool("line")}
+          activated={selectedTool === "line"}
+          title={"Line"}
+          icon={<Minus size={20} />}
+        />
+        <IconButton
+          onClick={() => setSelectedTool("arrow")}
+          activated={selectedTool === "arrow"}
+          title={"Arrow"}
+          icon={<ArrowRight size={20} />}
+        />
+        <IconButton
+          onClick={() => setSelectedTool("eraser")}
+          activated={selectedTool === "eraser"}
+          title={"Eraser"}
+          icon={<Eraser size={20} />}
+        />
         <div className="w-[1px] h-6 bg-zinc-600 mx-2" />
-        <IconButton onClick={onUndo} icon={<Undo size={20} />} activated={false} />
-        <IconButton onClick={onRedo} icon={<Redo size={20} />} activated={false} />
+        <IconButton onClick={onUndo} icon={<Undo size={20} />} activated={false} title={"Undo"} />
+        <IconButton onClick={onRedo} icon={<Redo size={20} />} activated={false} title={"Redo"} />
+        <IconButton onClick={onClear} icon={<Trash2 size={20} />} activated={false} title={"Delete canvas"} />
+        <IconButton onClick={onCollaborate} activated={false} icon={<Users size={20} />} title={"Collaborate"} />
       </div>
 
-      {/* Zoom control bottom left */}
+      {/*Zoom*/}
       <div className="fixed bottom-4 left-4 flex items-center gap-3 px-4 py-2 bg-zinc-800 shadow-lg rounded-lg z-50">
         <button
           onClick={onZoomOut}
