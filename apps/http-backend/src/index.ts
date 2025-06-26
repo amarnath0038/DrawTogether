@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { userMiddleware } from "./middleware";
-import { JWT_SECRET } from "@repo/backend-common/config";
+import { PORT, JWT_SECRET } from "@repo/backend-common/config";
 import { signupSchema, signinSchema, createRoomSchema } from "@repo/common/types";
 import bcrypt from "bcrypt";
 import { prismaClient } from "@repo/db/client";
@@ -303,7 +303,6 @@ app.post("/create-room", userMiddleware, userCreateRoom);
 app.get("/chats/:roomId", getRoomChats);
 app.get("/room/:slug", getRoomBySlug);
 
-const PORT = 3001;
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
