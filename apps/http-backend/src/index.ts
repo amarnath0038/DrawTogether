@@ -1,7 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { userMiddleware } from "./middleware";
-import { PORT, JWT_SECRET } from "@repo/backend-common/config";
+import { JWT_SECRET, HTTP_PORT } from "@repo/backend-common/config";
 import { signupSchema, signinSchema, createRoomSchema } from "@repo/common/types";
 import bcrypt from "bcrypt";
 import { prismaClient } from "@repo/db/client";
@@ -297,6 +297,8 @@ async function getRoomBySlug(req: Request<{ slug: string }>, res: Response) {
 }
 
 
+app.get("/", (req,res) => {res.json({message: "BACKEND running successfully"});});
+
 app.post("/signup", userSignup);
 app.post("/signin", userSignin);
 app.post("/create-room", userMiddleware, userCreateRoom);
@@ -304,6 +306,6 @@ app.get("/chats/:roomId", getRoomChats);
 app.get("/room/:slug", getRoomBySlug);
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(HTTP_PORT, () => {
+  console.log(`Server is running on http://localhost:${HTTP_PORT}`);
 });

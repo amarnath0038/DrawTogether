@@ -1,11 +1,11 @@
 import { WebSocketServer, WebSocket } from "ws";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "@repo/backend-common/config";
+import { JWT_SECRET, WS_PORT } from "@repo/backend-common/config";
 import { prismaClient } from "@repo/db/client";
 
 
-const wss = new WebSocketServer({ port: 8080 });
-console.log("WebSocket server running at ws://localhost:8080");
+const wss = new WebSocketServer({ port: WS_PORT });
+console.log(`WebSocket server running at ws://localhost:${WS_PORT}`);
  
 type Shape = any;
 
