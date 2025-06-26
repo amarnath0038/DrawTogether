@@ -21,12 +21,14 @@ model User {
 }
 
 model Room {
-  id        String   @id @default(uuid())
-  slug      String   @unique
-  createdAt DateTime @default(now())
-  adminId   String
-  admin     User     @relation(fields: [adminId], references: [id])
-  chats     Chat[]
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  createdAt    DateTime @default(now())
+  adminId      String
+  admin        User     @relation(fields: [adminId], references: [id])
+  chats        Chat[]
+  shapes       Json     @default("[]")
+  undoneShapes Json     @default("[]")
 }
 
 model Chat {

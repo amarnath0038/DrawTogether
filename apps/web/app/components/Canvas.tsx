@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { IconButton } from "./IconButton";
+import { ConfirmDeleteModal } from "./ConfirmModal";
 import {
   Circle,
   Pencil,
@@ -13,11 +15,14 @@ import {
   Redo,
   Users,
   Trash2,
-  Eraser
+  Eraser,
+  Hand,
+  Share2,
+  Home
 } from "lucide-react";
 import { Game } from "../sketch/Game";
 
-export type Tool = "pencil" | "line" | "arrow" | "rect" | "circle" | "triangle" | "rhombus" | "eraser";
+export type Tool = "grab" | "pencil" | "line" | "arrow" | "rect" | "circle" | "triangle" | "rhombus" | "eraser";
 
 export function Canvas({
   roomId,
@@ -65,10 +70,26 @@ export function Canvas({
     game?.resetZoom();
   };
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const handleDeleteClick = () => {
+    setShowConfirmModal(true); 
+  };
+
+  const handleConfirmDelete = () => {
+    game?.clearAllShapes();
+    setShowConfirmModal(false); 
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmModal(false); 
+  };
+
   return (
     <div className="h-screen w-screen relative bg-zinc-900">
       <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />
       <Topbar
+        roomId={roomId}
         selectedTool={selectedTool}
         setSelectedTool={setSelectedTool}
         onZoomIn={handleZoomIn}
@@ -77,14 +98,20 @@ export function Canvas({
         scale={scale}
         onUndo={() => game?.undo()}
         onRedo={() => game?.redo()}
-        onClear={() => game?.clearAllShapes()}
+        onClear={handleDeleteClick}
         onCollaborate={onCollaborate}
       />
+      {showConfirmModal && (<ConfirmDeleteModal
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />)}
+
     </div>
   );
 }
 
 function Topbar({
+  roomId,
   selectedTool,
   setSelectedTool,
   onZoomIn,
@@ -96,6 +123,7 @@ function Topbar({
   onClear,
   onCollaborate
 }: {
+  roomId: string
   selectedTool: Tool;
   setSelectedTool: (s: Tool) => void;
   onZoomIn: () => void;
@@ -107,9 +135,31 @@ function Topbar({
   onClear: () => void;
   onCollaborate: () => void;
 }) {
+
+    const router = useRouter();
+
   return (
     <>
+
+      {/* Dashboard */}
+      <div className="fixed top-4 left-4 z-50">
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="bg-zinc-800 p-2 rounded-lg text-white hover:bg-zinc-700 transition"
+          title="Back to Dashboard"
+        >
+          <Home size={20} />
+        </button>
+      </div>
+
+      {/*Toolbar*/}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-[1px] px-3 py-0.2 bg-zinc-800 shadow-lg rounded-lg z-50">
+        <IconButton
+          onClick={() => setSelectedTool("grab")}
+          activated={selectedTool === "grab"}
+          title={"Grab"}
+          icon={<Hand size={20} />}
+        />
         <IconButton
           onClick={() => setSelectedTool("pencil")}
           activated={selectedTool === "pencil"}
@@ -164,6 +214,7 @@ function Topbar({
         <IconButton onClick={onClear} icon={<Trash2 size={20} />} activated={false} title={"Delete canvas"} />
         <IconButton onClick={onCollaborate} activated={false} icon={<Users size={20} />} title={"Collaborate"} />
       </div>
+
 
       {/*Zoom*/}
       <div className="fixed bottom-4 left-4 flex items-center gap-3 px-4 py-2 bg-zinc-800 shadow-lg rounded-lg z-50">

@@ -52,7 +52,14 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
     }, [token, roomId]);
 
   if (!socket) {
-    return <div>Connecting to server....</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-black text-white">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-lg">Connecting to server</p>
+        </div>
+      </div>
+    );
   }
 
   return (

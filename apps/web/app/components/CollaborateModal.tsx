@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { Copy } from "lucide-react"; 
 
 export function CollaborateModal({
@@ -12,14 +11,6 @@ export function CollaborateModal({
 }) {
   const roomLink = `${window.location.origin}/room/${roomId}`;
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
-
   const copy = async (text: string) => {
     await navigator.clipboard.writeText(text);
     alert("Copied to clipboard");
@@ -28,16 +19,10 @@ export function CollaborateModal({
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-gray-800 rounded-2xl w-full max-w-md p-8 shadow-2xl border border-gray-700/50">
-        <div className="flex justify-between items-center mb-6">
+        <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-white">
             Collaborate in real time
           </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-all"
-          >
-            ✕
-          </button>
         </div>
 
         <div className="space-y-6">
@@ -76,6 +61,14 @@ export function CollaborateModal({
               </button>
             </div>
           </div>
+        </div>
+        <div className="mt-8 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-blue-700 text-white hover:bg-blue-600 transition"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

@@ -1,7 +1,9 @@
+import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Users, Zap, Palette } from "lucide-react";
 
 export const Hero = () => {
+  const router = useRouter();
   return (
     <section className="relative overflow-hidden py-20 lg:py-32">
       <div className="container mx-auto px-4 relative z-10">
@@ -28,6 +30,7 @@ export const Hero = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Button 
               size="lg" 
+              onClick={() => router.push("/dashboard")}
               className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
               Start Drawing
@@ -35,6 +38,7 @@ export const Hero = () => {
             <Button 
               variant="outline" 
               size="lg" 
+              onClick={() => router.push("/dashboard")}
               className="px-8 py-4 text-lg border-2 hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-600 dark:text-gray-300 transition-all duration-300"
             >
               Watch Demo
@@ -55,7 +59,7 @@ export const Hero = () => {
         </div>
       </div>
       
-      {/* Preview (video add karni chahiye idar shaayad*/}
+      {/* Preview (video add karni chahiye idar */}
       <div className="container mx-auto px-4 mt-16">
         <div className="max-w-5xl mx-auto">
           <div className="relative">

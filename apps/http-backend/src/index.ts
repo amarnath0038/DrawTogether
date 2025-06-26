@@ -136,8 +136,7 @@ app.get(
       return;
     }
     const token = jwt.sign({ id: req.user.id }, JWT_SECRET);
-    //res.json({ message: "Google signin successful", token, userId: req.user.id });
-    res.redirect(`http://localhost:3000/dashboard?token=${token}`)
+    res.redirect(`http://localhost:3000/auth-callback?token=${token}`)
   }
 );
 
@@ -152,11 +151,9 @@ app.get(
       return;
     }
     const token = jwt.sign({ id: req.user.id }, JWT_SECRET);
-    //res.json({ message: "GitHub signin successful", token, userId: req.user.id });
-    res.redirect(`http://localhost:3000/dashboard?token=${token}`)
+    res.redirect(`http://localhost:3000/auth-callback?token=${token}`)
   }
 );
-
 
 
 async function userSignup(req: Request, res: Response) {
