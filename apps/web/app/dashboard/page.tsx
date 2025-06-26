@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTheme } from ".././hooks/useTheme";
 import { Plus, Key, Clock, Palette, Moon, Sun, LogOut } from "lucide-react";
+import { HTTP_BACKEND } from "../../config";
 
 
 export default function Dashboard() {
@@ -25,7 +26,7 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem("token");
       setCreating(true);
-      const res = await axios.post("http://localhost:3001/create-room",
+      const res = await axios.post(`${HTTP_BACKEND}/create-room`,
         {name: roomName},
         {headers: {Authorization: `Bearer ${token}`}}
       );

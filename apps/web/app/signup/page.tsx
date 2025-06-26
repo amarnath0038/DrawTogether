@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff, Palette, Moon, Sun } from "lucide-react";
 import { useTheme } from ".././hooks/useTheme";
 import axios from "axios";
+import { HTTP_BACKEND } from "../../config";
 
 export default function Signup() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function Signup() {
   async function signupHandler(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/signup", {name, email, password});
+      const res = await axios.post(`${HTTP_BACKEND}/signup`, {name, email, password});
       router.push("/signin");
     } catch (err: any) {
       console.error("Signup error", err);
@@ -102,7 +103,7 @@ export default function Signup() {
         <div className="space-y-3">
           <button
             type="button"
-            onClick={() => window.location.href = "http://localhost:3001/auth/google"}
+            onClick={() => window.location.href = `${HTTP_BACKEND}/auth/google`}
             className="w-full flex items-center justify-center py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm">
             <img src="/google-logo.svg" alt="Google" className="w-5 h-5 mr-3" />
             Continue with Google
@@ -110,7 +111,7 @@ export default function Signup() {
           
           <button
             type="button"
-            onClick={() => window.location.href = "http://localhost:3001/auth/github"}
+            onClick={() => window.location.href = `${HTTP_BACKEND}/auth/github`}
             className="w-full flex items-center justify-center py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm">
             <img src="/github-logo.svg" alt="Github" className="w-5 h-5 mr-3" />
             Continue with Github
