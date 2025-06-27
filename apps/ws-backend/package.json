@@ -17,7 +17,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.9",
     "jsonwebtoken": "^9.0.2",
