@@ -2,7 +2,8 @@ import dotenv from "dotenv";
 import path from "path";
 
 // Load from current wd
-dotenv.config({path: path.resolve(process.cwd(),".env")});
+//dotenv.config({path: path.resolve(process.cwd(),".env")});
+dotenv.config();
 
 export const DATABASE_URL = process.env.DATABASE_URL || "";
 export const JWT_SECRET = process.env.JWT_SECRET || "";
@@ -17,7 +18,3 @@ export const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
 
 export const HTTP_PORT = process.env.PORT || "3001";
 export const WS_PORT = parseInt(process.env.PORT || "8080", 10);
-
-
-
-
