@@ -7,7 +7,9 @@
     "./client": "./src/index.ts"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma": "prisma",
+    "generate": "prisma generate"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
@@ -18,8 +20,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@prisma/client": "6.8.1",
+    "@prisma/client": "5.15.0",
     "dotenv": "^16.5.0",
-    "prisma": "^6.8.1"
+    "prisma": "5.15.0"
   }
 }
