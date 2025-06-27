@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 //import path from "path";
 
 // Load from current wd
 //dotenv.config({path: path.resolve(process.cwd(),".env")});
-dotenv.config();
+//dotenv.config();
 
 export const DATABASE_URL = process.env.DATABASE_URL || "";
 export const JWT_SECRET = process.env.JWT_SECRET || "";
